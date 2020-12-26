@@ -117,5 +117,6 @@ func baseJob(storageType consts.StorageType, rw fio.RW, mode fio.Access, blockSi
 		Direct:   defaults.DefaultDirect,
 		Size:     size,
 		IOEngine: defaults.DefaultIOEngine,
+		Runtime:  defaults.DefaultRuntime,
 	}
 }

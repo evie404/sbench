@@ -19,6 +19,7 @@ type Job struct {
 	Loops     int
 	ReadWrite RWAccess
 	Thread    bool
+	Runtime   string
 }
 
 func (j *Job) Run(directory, outputBaseDir string, stdout, stderr io.Writer) error {
@@ -51,6 +52,7 @@ func (j *Job) Run(directory, outputBaseDir string, stdout, stderr io.Writer) err
 		"--directory="+directory,
 		"--output="+outputPath,
 		"--output-format=json+",
+		"--runtime="+j.Runtime,
 	)
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
