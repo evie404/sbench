@@ -114,9 +114,10 @@ func baseJob(storageType consts.StorageType, rw fio.RW, mode fio.Access, blockSi
 
 		RWMixRead: crystalDiskMarkDefaultRWMixRead,
 
-		Direct:   defaults.DefaultDirect,
-		Size:     size,
-		IOEngine: defaults.DefaultIOEngine,
-		Runtime:  defaults.DefaultRuntime,
+		Direct:    defaults.DefaultDirect,
+		Size:      size,
+		IOEngine:  defaults.DefaultIOEngine,
+		Runtime:   defaults.DefaultRuntime,
+		TimeBased: defaults.DefaultTimeBased,
 	}
 }

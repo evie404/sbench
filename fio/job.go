@@ -20,6 +20,7 @@ type Job struct {
 	ReadWrite RWAccess
 	Thread    bool
 	Runtime   string
+	TimeBased bool
 }
 
 func (j *Job) Run(directory, outputBaseDir string, stdout, stderr io.Writer) error {
@@ -31,6 +32,11 @@ func (j *Job) Run(directory, outputBaseDir string, stdout, stderr io.Writer) err
 	thread := "0"
 	if j.Thread {
 		thread = "1"
+	}
+
+	timeBased := "0"
+	if j.TimeBased {
+		timeBased = "1"
 	}
 
 	outputPath := filepath.Join(outputBaseDir, j.Name+".json")
@@ -53,6 +59,7 @@ func (j *Job) Run(directory, outputBaseDir string, stdout, stderr io.Writer) err
 		"--output="+outputPath,
 		"--output-format=json+",
 		"--runtime="+j.Runtime,
+		"--time_based="+timeBased,
 	)
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
