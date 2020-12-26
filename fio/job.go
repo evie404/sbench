@@ -3,6 +3,7 @@ package fio
 import (
 	"io"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 )
 
@@ -15,13 +16,12 @@ type Job struct {
 	IOEngine  IOEngine
 	BlockSize string
 	Size      string
-	Directory string
 	Loops     int
 	ReadWrite RWAccess
 	Thread    bool
 }
 
-func (j *Job) Run(stdout, stderr io.Writer) error {
+func (j *Job) Run(directory, outputBaseDir string, stdout, stderr io.Writer) error {
 	direct := "0"
 	if j.Direct {
 		direct = "1"
@@ -31,6 +31,8 @@ func (j *Job) Run(stdout, stderr io.Writer) error {
 	if j.Thread {
 		thread = "1"
 	}
+
+	outputPath := filepath.Join(outputBaseDir, j.Name+".json")
 
 	cmd := exec.Command(
 		"fio",
@@ -46,10 +48,9 @@ func (j *Job) Run(stdout, stderr io.Writer) error {
 		"--loops="+strconv.Itoa(j.Loops),
 		"--rw="+string(j.ReadWrite),
 		"--thread="+thread,
-
-		"--parse-only",
-
-		"--directory="+j.Directory,
+		"--directory="+directory,
+		"--output="+outputPath,
+		"--output-format=json+",
 	)
 	cmd.Stdout = stdout
 	cmd.Stderr = stderr
