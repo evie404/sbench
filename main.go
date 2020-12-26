@@ -9,13 +9,15 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/rickypai/sbench/consts"
 	"github.com/rickypai/sbench/fio/targets/crystaldiskmark"
 )
 
 var (
-	directoryFlag = flag.String("directory", "", "directory of the test file")
-	outputDirFlag = flag.String("outputdir", "", "output directory of results")
-	loopsFlag     = flag.Int("loops", 1, "number of loops")
+	directoryFlag   = flag.String("directory", "", "directory of the test file")
+	outputDirFlag   = flag.String("outputdir", "", "output directory of results")
+	loopsFlag       = flag.Int("loops", 1, "number of loops")
+	storageTypeFlag = flag.String("storage-type", "hdd", "type of storage. options: ssd, hdd, nvme, usb")
 )
 
 func main() {
@@ -28,6 +30,7 @@ func main() {
 	if outputDirFlag == nil || *outputDirFlag == "" {
 		log.Fatal("--outputdir flag required")
 	}
+	storageType := consts.StorageType(*storageTypeFlag)
 
 	ts := time.Now().Unix()
 
@@ -39,7 +42,7 @@ func main() {
 
 	var stdout, stderr bytes.Buffer
 
-	jobs := crystaldiskmark.CrystalDiskMarkTests(1, true)
+	jobs := crystaldiskmark.CrystalDiskMarkTests(storageType, 1, true)
 
 	for _, job := range jobs {
 		err = os.RemoveAll(*directoryFlag)
